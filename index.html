@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Investment Club | Discovery Day</title>
+<style>
+:root{--navy:#0b1f3a;--blue:#1d4ed8;--sky:#60a5fa;--pale:#eff6ff;--ink:#172b4d;--muted:#61738b;--line:#dce7f5;--white:#fff}
+*{box-sizing:border-box} body{margin:0;background:#f4f8fd;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button{font:inherit} .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top-inner{max-width:1180px;margin:auto;padding:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.03em;color:var(--navy);font-size:13px}
+.brand-mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,#1d4ed8,#60a5fa);display:grid;place-items:center;color:white;font-weight:900;box-shadow:0 5px 15px #2563eb40}
+.top-note{color:var(--muted);font-size:12px;font-weight:650}
+.shell{max-width:1180px;margin:0 auto;padding:40px 26px 70px}
+.intro{display:flex;justify-content:space-between;align-items:end;gap:25px;margin-bottom:26px}
+.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:#2563eb}
+h1{font-size:clamp(32px,5vw,54px);letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;color:var(--navy)}
+.lede{max-width:650px;color:#526780;font-size:15px;margin:0}
+.pill{white-space:nowrap;background:#e4efff;color:#1d4ed8;padding:9px 13px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.04em}
+.selector-wrap{background:#fff;border:1px solid var(--line);padding:8px;border-radius:17px;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;box-shadow:0 10px 30px #17365d0b;margin-bottom:23px}
+.company-select{border:0;background:transparent;border-radius:12px;padding:13px 12px;text-align:left;cursor:pointer;color:#64748b;transition:.2s;min-width:0}
+.company-select strong{display:block;font-size:13px;color:inherit} .company-select small{display:block;font-size:10px;margin-top:3px;opacity:.8}
+.company-select.active{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;box-shadow:0 5px 14px #2563eb35}
+.scenario-panel{display:none;--accent:#2563eb;--pale:#dbeafe;--deep:#1e3a8a} .scenario-panel.active{display:block;animation:rise .35s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero-card{display:grid;grid-template-columns:1fr .92fr;min-height:300px;border-radius:24px;overflow:hidden;background:linear-gradient(120deg,var(--deep),var(--accent));color:white;box-shadow:0 18px 45px #17365d22}
+.hero-copy{padding:36px 38px;position:relative;z-index:1} .eyebrow{font-size:10px;letter-spacing:.2em;font-weight:850;color:#dbeafe}
+.hero-card h2{font-size:clamp(30px,4vw,44px);line-height:1.05;letter-spacing:-.04em;margin:13px 0 7px;color:white}
+.industry{font-size:12px;color:#dbeafe;font-weight:700;margin:0 0 20px} .hero-intro{font-size:13px;line-height:1.7;color:#eff6ff;max-width:510px;margin:0}
+.hero-stat{display:inline-flex;align-items:center;gap:15px;margin-top:24px;background:#ffffff1c;border:1px solid #ffffff35;border-radius:12px;padding:10px 14px}
+.hero-stat span{font-size:9px;letter-spacing:.14em;font-weight:800;color:#dbeafe} .hero-stat strong{font-size:17px} .hero-stat i{font-style:normal;color:#bfdbfe;padding:0 5px}
+.hero-art{display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 50% 50%,#ffffff26,transparent 65%)}
+.hero-art svg{width:100%;max-width:480px;filter:drop-shadow(0 16px 18px #071c3b33)}
+.section-nav{display:flex;gap:7px;overflow-x:auto;padding:14px 0 12px;margin-bottom:4px}
+.section-tab{border:1px solid var(--line);background:#fff;color:#64748b;border-radius:999px;padding:9px 16px;font-size:12px;font-weight:750;white-space:nowrap;cursor:pointer}
+.section-tab.active{background:var(--deep);border-color:var(--deep);color:#fff}
+.section-content{display:none} .section-content.active{display:block;animation:rise .25s ease}
+.content-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.info-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 8px 24px #17365d08;min-width:0}
+.info-card.feature{border-top:4px solid var(--accent)} .info-card.tinted{background:linear-gradient(145deg,var(--pale),#fff);border-color:var(--pale)}
+.card-kicker{font-size:9px;letter-spacing:.16em;color:var(--accent);font-weight:850}
+.info-card h3{font-size:20px;letter-spacing:-.025em;color:var(--navy);margin:7px 0 10px}
+.info-card p{font-size:13px;color:#53677f;line-height:1.75;margin:0}
+.info-card ul{margin:12px 0 0;padding-left:18px;color:#53677f;font-size:12px;line-height:1.9}
+.cause-list{list-style:none;padding:0!important} .cause-list li{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid #e8eef7}
+.bullet{width:8px;height:8px;flex:0 0 8px;border-radius:50%;background:var(--accent)}
+.table-note{margin-bottom:16px!important} .table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;text-align:left;min-width:380px}
+th{background:var(--deep);color:#fff;padding:12px 14px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+th:first-child{border-radius:9px 0 0 0} th:last-child{border-radius:0 9px 0 0}
+td{padding:13px 14px;border-bottom:1px solid #e8eef7;color:#526780}
+tr:nth-child(even) td{background:#f7faff} td:first-child{font-weight:750;color:var(--navy)} .current-value{font-weight:850;color:var(--accent)}
+.footnote{font-size:11px!important;margin-top:14px!important;color:#8291a5!important}
+.challenge-card{margin-top:16px;border-radius:18px;padding:22px 25px;background:linear-gradient(120deg,var(--deep),var(--accent));color:white;box-shadow:0 12px 25px #17365d1c}
+.challenge-label{font-size:9px;letter-spacing:.18em;font-weight:850;color:#dbeafe}
+.challenge-card p{font-size:15px;font-weight:650;line-height:1.6;margin:8px 0 0;color:#fff}
+.guide{margin-top:32px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px}
+.guide-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:15px}
+.guide h3{margin:0;color:var(--navy);font-size:19px} .guide-head span{font-size:10px;color:#2563eb;font-weight:850;letter-spacing:.13em}
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.guide-item{background:#f5f9ff;border-radius:13px;padding:15px} .guide-item b{display:block;font-size:12px;color:#1e3a8a;margin-bottom:5px} .guide-item p{margin:0;font-size:11px;color:#61738b;line-height:1.6}
+.footer{text-align:center;padding:30px 10px 0;color:#94a3b8;font-size:10px;letter-spacing:.08em}
+@media(max-width:760px){.shell{padding:28px 15px 50px}.top-inner{padding:12px 16px}.intro{display:block}.pill{display:inline-block;margin-top:15px}.selector-wrap{grid-template-columns:repeat(2,1fr)}.hero-card{grid-template-columns:1fr}.hero-copy{padding:27px 24px 12px}.hero-art{padding:0 20px 18px}.hero-art svg{max-height:210px}.content-grid{grid-template-columns:1fr}.guide-grid{grid-template-columns:1fr}.info-card{padding:20px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="top-inner"><div class="brand"><div class="brand-mark">M</div><span>MOCK INVESTMENT CLUB</span></div><div class="top-note">DISCOVERY DAY · COMPANY CASE FILES</div></div></header>
+<main class="shell">
+  <div class="intro"><div><div class="kicker">THE INVESTMENT COMMITTEE CHALLENGE</div><h1>Four companies.<br>Four different challenges.</h1><p class="lede">Explore your assigned company, investigate what is affecting its stock, and build an investment case that can stand up to questions.</p></div><div class="pill">4 FICTIONAL COMPANIES</div></div>
+  <div class="selector-wrap" role="tablist" aria-label="Choose a company">
+    <button class="company-select active" role="tab" aria-selected="true" data-company="technova"><strong>01 · Consumer Electronics</strong><small>Declining giant</small></button>
+    <button class="company-select" role="tab" aria-selected="false" data-company="nexatech"><strong>02 · Technology</strong><small>Corporate scandal</small></button>
+    <button class="company-select" role="tab" aria-selected="false" data-company="velocity"><strong>03 · Automotive</strong><small>Financial trap</small></button>
+    <button class="company-select" role="tab" aria-selected="false" data-company="globalroute"><strong>04 · Logistics</strong><small>Tech disruption</small></button>
+  </div>
+  
+    <section class="scenario-panel" id="technova" style="--accent:#2563EB;--pale:#DBEAFE;--deep:#1E3A8A">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">THE DECLINING GIANT</div>
+          <h2>Consumer Electronics</h2>
+          <p class="industry">Retail</p>
+          <p class="hero-intro">Established in 2008, the consumer electronics company sells smartphones, laptops, tablets, and other electronic devices. It became a leading brand by offering affordable, reliable products through a wide distribution network.</p>
+          <div class="hero-stat"><span>STOCK PRICE</span><strong>$80 <i>→</i> $52</strong></div>
+        </div>
+        <div class="hero-art"><svg viewBox="0 0 520 300" role="img" aria-label="Company industry illustration" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#60A5FA"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs>
+        <circle cx="390" cy="70" r="54" fill="#BFDBFE" opacity=".7"/><circle cx="105" cy="230" r="78" fill="#93C5FD" opacity=".28"/>
+        <rect x="173" y="25" width="166" height="252" rx="28" fill="#0F2E67" opacity=".16"/>
+        <rect x="182" y="17" width="156" height="252" rx="27" fill="#0B1F44"/>
+        <rect x="192" y="31" width="136" height="224" rx="18" fill="url(#g)"/>
+        <rect x="232" y="40" width="56" height="7" rx="4" fill="#DBEAFE"/>
+        <circle cx="260" cy="225" r="8" fill="#DBEAFE"/>
+        <path d="M205 174 L245 125 L270 153 L300 95 L316 120 L316 245 L205 245Z" fill="#DBEAFE" opacity=".78"/>
+        <path d="M90 90h55M117 62v56M375 202h54M402 175v54" stroke="#2563EB" stroke-width="8" stroke-linecap="round" opacity=".5"/>
+        <rect x="65" y="125" width="72" height="92" rx="12" fill="#BFDBFE"/><rect x="76" y="137" width="50" height="68" rx="7" fill="#3B82F6"/>
+        <rect x="365" y="85" width="82" height="104" rx="13" fill="#BFDBFE"/><rect x="376" y="97" width="60" height="80" rx="8" fill="#1D4ED8"/>
+        </svg></div>
+      </div>
+      <nav class="section-nav" aria-label="Scenario sections">
+        <button class="section-tab active" data-target="overview-technova">Overview</button>
+        <button class="section-tab" data-target="analysis-technova">Problem analysis</button>
+        <button class="section-tab" data-target="numbers-technova">Financials</button>
+        <button class="section-tab" data-target="future-technova">Future outlook</button>
+      </nav>
+      <div class="section-content active" id="overview-technova">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">01 / THE SITUATION</span><h3>The problem</h3><p>Sales and profitability have declined over the past three years. Competitors offer cheaper products and newer technologies, causing customers to switch and the consumer electronics company’s market share to fall.</p></article>
+          <article class="info-card"><span class="card-kicker">02 / WHO IS AFFECTED</span><h3>Stakeholders</h3><ul><li>Customers are shifting to competitors.</li><li>Shareholders are worried about continued decline.</li><li>Competitors are expanding their market position.</li><li>Analysts are questioning the consumer electronics company’s ability to compete.</li></ul></article>
+        </div>
+      </div>
+      <div class="section-content" id="analysis-technova">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">ROOT CAUSES</span><h3>What is driving the problem?</h3><ul class="cause-list"><li><span class="bullet"></span>Outdated products</li><li><span class="bullet"></span>Strong price competition</li><li><span class="bullet"></span>Weak marketing to younger consumers</li><li><span class="bullet"></span>Poor customer retention</li></ul></article>
+          <article class="info-card tinted"><span class="card-kicker">TEAM TASK</span><h3>Think like an investor</h3><p>Separate the symptoms from the underlying causes. Decide which issues your strategy must address first, and explain why.</p></article>
+        </div>
+      </div>
+      <div class="section-content" id="numbers-technova">
+        <article class="info-card">
+          <span class="card-kicker">FINANCIAL SNAPSHOT</span><h3>Company performance</h3>
+          <p class="table-note">Compare the previous figures with the current figures.</p>
+          <div class="table-wrap"><table><thead><tr><th>Metric</th><th>Previous</th><th>Current</th></tr></thead><tbody>
+          <tr><td>Revenue</td><td>$100M</td><td class="current-value">$75M</td></tr><tr><td>Net profit</td><td>$15M</td><td class="current-value">$7M</td></tr><tr><td>Market share</td><td>30%</td><td class="current-value">19%</td></tr><tr><td>Stock price</td><td>$80</td><td class="current-value">$52</td></tr>
+          </tbody></table></div>
+          <p class="footnote">Use the figures as evidence. Explain what has changed and why it matters to investors.</p>
+        </article>
+      </div>
+      <div class="section-content" id="future-technova">
+        <article class="info-card feature"><span class="card-kicker">WHAT COMES NEXT?</span><h3>Future outlook</h3><p>A new smartphone featuring an advanced battery and camera has received positive initial testing. However, mass production and nationwide marketing will require substantial investment.</p></article>
+      </div>
+      <div class="challenge-card"><div class="challenge-label">YOUR INVESTMENT CHALLENGE</div><p>How can the consumer electronics company restore its competitiveness, recover sales, differentiate its products, make use of the new smartphone, and rebuild investor confidence?</p></div>
+    </section>
+    <section class="scenario-panel" id="nexatech" style="--accent:#4F46E5;--pale:#E0E7FF;--deep:#312E81">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">THE CORPORATE SCANDAL</div>
+          <h2>Technology</h2>
+          <p class="industry">Consumer Electronics</p>
+          <p class="hero-intro">the technology company develops smart home devices, including security cameras, smart speakers, and home automation products. It sells in more than 15 countries and is known for innovation.</p>
+          <div class="hero-stat"><span>STOCK PRICE</span><strong>$120 <i>→</i> $78</strong></div>
+        </div>
+        <div class="hero-art"><svg viewBox="0 0 520 300" role="img" aria-label="Company industry illustration" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="390" cy="68" r="58" fill="#C7D2FE" opacity=".8"/><circle cx="112" cy="235" r="80" fill="#A5B4FC" opacity=".35"/>
+        <path d="M260 24 L390 70 V153 C390 220 332 261 260 285 C188 261 130 220 130 153 V70Z" fill="#312E81" opacity=".12"/>
+        <path d="M260 16 L382 60 V146 C382 210 329 250 260 274 C191 250 138 210 138 146 V60Z" fill="#4338CA"/>
+        <path d="M260 43 L354 77 V144 C354 194 316 225 260 247 C204 225 166 194 166 144 V77Z" fill="#E0E7FF"/>
+        <rect x="213" y="117" width="94" height="69" rx="12" fill="#6366F1"/>
+        <path d="M230 117V96a30 30 0 0 1 60 0v21" fill="none" stroke="#312E81" stroke-width="13" stroke-linecap="round"/>
+        <circle cx="260" cy="148" r="8" fill="#EEF2FF"/><path d="M260 156v13" stroke="#EEF2FF" stroke-width="6" stroke-linecap="round"/>
+        <path d="M80 93h55M107 66v54M390 215h54M417 188v54" stroke="#6366F1" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+        <circle cx="90" cy="170" r="18" fill="#A5B4FC"/><circle cx="430" cy="105" r="14" fill="#818CF8"/>
+        </svg></div>
+      </div>
+      <nav class="section-nav" aria-label="Scenario sections">
+        <button class="section-tab active" data-target="overview-nexatech">Overview</button>
+        <button class="section-tab" data-target="analysis-nexatech">Problem analysis</button>
+        <button class="section-tab" data-target="numbers-nexatech">Financials</button>
+        <button class="section-tab" data-target="future-nexatech">Future outlook</button>
+      </nav>
+      <div class="section-content active" id="overview-nexatech">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">01 / THE SITUATION</span><h3>The problem</h3><p>An independent investigation revealed that some security cameras collected customer data beyond what the privacy policy disclosed. Recordings were accessible to third-party contractors without sufficient transparency or customer awareness. News of the issue spread, damaging customer trust.</p></article>
+          <article class="info-card"><span class="card-kicker">02 / WHO IS AFFECTED</span><h3>Stakeholders</h3><ul><li>Customers are cancelling subscriptions or returning products.</li><li>Partners are reconsidering contracts.</li><li>Authorities are investigating the company.</li><li>Shareholders are concerned about lawsuits and penalties.</li><li>Competitors are attracting customers.</li></ul></article>
+        </div>
+      </div>
+      <div class="section-content" id="analysis-nexatech">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">ROOT CAUSES</span><h3>What is driving the problem?</h3><ul class="cause-list"><li><span class="bullet"></span>Insufficient data protection</li><li><span class="bullet"></span>Lack of transparency</li><li><span class="bullet"></span>Management oversight failures</li><li><span class="bullet"></span>A privacy regulatory investigation</li></ul></article>
+          <article class="info-card tinted"><span class="card-kicker">TEAM TASK</span><h3>Think like an investor</h3><p>Separate the symptoms from the underlying causes. Decide which issues your strategy must address first, and explain why.</p></article>
+        </div>
+      </div>
+      <div class="section-content" id="numbers-nexatech">
+        <article class="info-card">
+          <span class="card-kicker">FINANCIAL SNAPSHOT</span><h3>Company performance</h3>
+          <p class="table-note">Compare the previous figures with the current figures.</p>
+          <div class="table-wrap"><table><thead><tr><th>Metric</th><th>Previous</th><th>Current</th></tr></thead><tbody>
+          <tr><td>Revenue</td><td>$200M</td><td class="current-value">$185M</td></tr><tr><td>Net profit</td><td>$30M</td><td class="current-value">$22M</td></tr><tr><td>Customer satisfaction</td><td>90%</td><td class="current-value">58%</td></tr><tr><td>Stock price</td><td>$120</td><td class="current-value">$78</td></tr>
+          </tbody></table></div>
+          <p class="footnote">Use the figures as evidence. Explain what has changed and why it matters to investors.</p>
+        </article>
+      </div>
+      <div class="section-content" id="future-nexatech">
+        <article class="info-card feature"><span class="card-kicker">WHAT COMES NEXT?</span><h3>Future outlook</h3><p>A new CEO has promised to rebuild trust. Stronger data protection, independent cybersecurity audits, and clearer privacy policies are being considered. These measures will be costly, and it is uncertain whether customers will return.</p></article>
+      </div>
+      <div class="challenge-card"><div class="challenge-label">YOUR INVESTMENT CHALLENGE</div><p>How can the technology company respond to the scandal, rebuild trust, communicate with stakeholders, prevent the issue from happening again, and convince investors that the company can recover?</p></div>
+    </section>
+    <section class="scenario-panel" id="velocity" style="--accent:#0891B2;--pale:#CFFAFE;--deep:#164E63">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">THE FINANCIAL TRAP</div>
+          <h2>Automotive Manufacturing</h2>
+          <p class="industry">Electric Vehicles</p>
+          <p class="hero-intro">the automotive company is an established automotive manufacturer focused on affordable passenger vehicles. It has held a strong domestic position for more than 20 years and is now moving into electric vehicles (EVs).</p>
+          <div class="hero-stat"><span>STOCK PRICE</span><strong>$95 <i>→</i> $61</strong></div>
+        </div>
+        <div class="hero-art"><svg viewBox="0 0 520 300" role="img" aria-label="Company industry illustration" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="390" cy="70" r="60" fill="#A5F3FC" opacity=".7"/><circle cx="110" cy="228" r="76" fill="#67E8F9" opacity=".3"/>
+        <path d="M90 190 L125 133 Q137 114 162 110 L327 110 Q350 112 366 133 L420 190Z" fill="#0E7490"/>
+        <path d="M160 116 L204 64 H309 L351 116Z" fill="#67E8F9"/>
+        <path d="M211 75h89l28 36H181Z" fill="#E0F2FE"/>
+        <rect x="75" y="180" width="370" height="67" rx="23" fill="#0891B2"/>
+        <rect x="92" y="192" width="48" height="18" rx="8" fill="#FEF3C7"/><rect x="382" y="192" width="44" height="18" rx="8" fill="#FEF3C7"/>
+        <circle cx="159" cy="244" r="33" fill="#164E63"/><circle cx="159" cy="244" r="15" fill="#CFFAFE"/>
+        <circle cx="358" cy="244" r="33" fill="#164E63"/><circle cx="358" cy="244" r="15" fill="#CFFAFE"/>
+        <path d="M236 147h50" stroke="#CFFAFE" stroke-width="8" stroke-linecap="round"/>
+        <path d="M260 133l-18 24h17l-8 24 30-34h-18l9-14Z" fill="#ECFEFF"/>
+        </svg></div>
+      </div>
+      <nav class="section-nav" aria-label="Scenario sections">
+        <button class="section-tab active" data-target="overview-velocity">Overview</button>
+        <button class="section-tab" data-target="analysis-velocity">Problem analysis</button>
+        <button class="section-tab" data-target="numbers-velocity">Financials</button>
+        <button class="section-tab" data-target="future-velocity">Future outlook</button>
+      </nav>
+      <div class="section-content active" id="overview-velocity">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">01 / THE SITUATION</span><h3>The problem</h3><p>The company borrowed $95M to fund an EV factory, equipment, battery technology, and research and development. Construction delays and equipment shortages increased costs and borrowing expenses. EV demand has been weaker than projected because of competition and pricing, making it difficult to manage debt while maintaining operations.</p></article>
+          <article class="info-card"><span class="card-kicker">02 / WHO IS AFFECTED</span><h3>Stakeholders</h3><ul><li>Investors are worried about repayment.</li><li>Banks are cautious about further lending.</li><li>EV competitors are gaining market share.</li><li>Customers are concerned about vehicle prices and charging infrastructure.</li></ul></article>
+        </div>
+      </div>
+      <div class="section-content" id="analysis-velocity">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">ROOT CAUSES</span><h3>What is driving the problem?</h3><ul class="cause-list"><li><span class="bullet"></span>Excessive borrowing</li><li><span class="bullet"></span>Unexpected project expenses</li><li><span class="bullet"></span>Weaker-than-expected EV demand</li><li><span class="bullet"></span>Higher interest expenses</li></ul></article>
+          <article class="info-card tinted"><span class="card-kicker">TEAM TASK</span><h3>Think like an investor</h3><p>Separate the symptoms from the underlying causes. Decide which issues your strategy must address first, and explain why.</p></article>
+        </div>
+      </div>
+      <div class="section-content" id="numbers-velocity">
+        <article class="info-card">
+          <span class="card-kicker">FINANCIAL SNAPSHOT</span><h3>Company performance</h3>
+          <p class="table-note">Compare the previous figures with the current figures.</p>
+          <div class="table-wrap"><table><thead><tr><th>Metric</th><th>Previous</th><th>Current</th></tr></thead><tbody>
+          <tr><td>Revenue</td><td>$150M</td><td class="current-value">$160M</td></tr><tr><td>Net profit</td><td>$20M</td><td class="current-value">$8M</td></tr><tr><td>Total debt</td><td>$40M</td><td class="current-value">$95M</td></tr><tr><td>Stock price</td><td>$95</td><td class="current-value">$61</td></tr>
+          </tbody></table></div>
+          <p class="footnote">Use the figures as evidence. Explain what has changed and why it matters to investors.</p>
+        </article>
+      </div>
+      <div class="section-content" id="future-velocity">
+        <article class="info-card feature"><span class="card-kicker">WHAT COMES NEXT?</span><h3>Future outlook</h3><p>The new facility is now operational and is expected to increase capacity and reduce unit costs over time. the automotive company is developing a more affordable EV but needs additional funding for development and distribution.</p></article>
+      </div>
+      <div class="challenge-card"><div class="challenge-label">YOUR INVESTMENT CHALLENGE</div><p>How can the automotive company manage its debt, improve profitability, take advantage of the EV market, and balance financial risk with the need to fund future growth?</p></div>
+    </section>
+    <section class="scenario-panel" id="globalroute" style="--accent:#1D4ED8;--pale:#DBEAFE;--deep:#172554">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">THE TECHNOLOGICAL DISRUPTION</div>
+          <h2>Transportation &amp; Logistics</h2>
+          <p class="industry">Supply Chain Services</p>
+          <p class="hero-intro">the logistics company provides logistics services to retailers, manufacturers, and e-commerce businesses. It operates in several countries, has a large fleet and distribution network, and maintains relationships with major retailers.</p>
+          <div class="hero-stat"><span>STOCK PRICE</span><strong>$110 <i>→</i> $82</strong></div>
+        </div>
+        <div class="hero-art"><svg viewBox="0 0 520 300" role="img" aria-label="Company industry illustration" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="390" cy="65" r="58" fill="#BFDBFE" opacity=".75"/><circle cx="105" cy="225" r="75" fill="#93C5FD" opacity=".3"/>
+        <path d="M65 225h390" stroke="#1D4ED8" stroke-width="9" stroke-linecap="round" opacity=".3"/>
+        <rect x="85" y="135" width="350" height="88" rx="12" fill="#1E40AF"/>
+        <path d="M85 135l58-44h234l58 44Z" fill="#60A5FA"/>
+        <rect x="112" y="155" width="64" height="68" rx="5" fill="#DBEAFE"/><rect x="188" y="155" width="64" height="68" rx="5" fill="#BFDBFE"/><rect x="264" y="155" width="64" height="68" rx="5" fill="#DBEAFE"/><rect x="340" y="155" width="68" height="68" rx="5" fill="#BFDBFE"/>
+        <path d="M220 85h84" stroke="#1D4ED8" stroke-width="8" stroke-linecap="round"/><path d="M262 65v40" stroke="#1D4ED8" stroke-width="8" stroke-linecap="round"/>
+        <rect x="210" y="190" width="95" height="33" rx="5" fill="#2563EB"/><circle cx="230" cy="230" r="17" fill="#172554"/><circle cx="284" cy="230" r="17" fill="#172554"/>
+        <path d="M155 90l18-18 18 18M365 92l18-18 18 18" fill="none" stroke="#3B82F6" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></div>
+      </div>
+      <nav class="section-nav" aria-label="Scenario sections">
+        <button class="section-tab active" data-target="overview-globalroute">Overview</button>
+        <button class="section-tab" data-target="analysis-globalroute">Problem analysis</button>
+        <button class="section-tab" data-target="numbers-globalroute">Financials</button>
+        <button class="section-tab" data-target="future-globalroute">Future outlook</button>
+      </nav>
+      <div class="section-content active" id="overview-globalroute">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">01 / THE SITUATION</span><h3>The problem</h3><p>A startup called a technology startup has introduced an AI-powered logistics platform using demand prediction, route optimization, inventory optimization, and warehouse automation. Competitors are adopting similar technology and delivering faster, cheaper services. the logistics company still relies on traditional and manual systems, causing its costs to rise relative to competitors. Clients may switch providers.</p></article>
+          <article class="info-card"><span class="card-kicker">02 / WHO IS AFFECTED</span><h3>Stakeholders</h3><ul><li>Major clients are considering switching providers.</li><li>Investors are questioning the company’s ability to adapt.</li><li>Competitors are gaining customers.</li><li>Employees are concerned about possible job changes.</li></ul></article>
+        </div>
+      </div>
+      <div class="section-content" id="analysis-globalroute">
+        <div class="content-grid">
+          <article class="info-card feature"><span class="card-kicker">ROOT CAUSES</span><h3>What is driving the problem?</h3><ul class="cause-list"><li><span class="bullet"></span>Technological lag</li><li><span class="bullet"></span>More efficient competitors</li><li><span class="bullet"></span>Higher labor and resource costs</li><li><span class="bullet"></span>Customer expectations for faster, cheaper deliveries</li></ul></article>
+          <article class="info-card tinted"><span class="card-kicker">TEAM TASK</span><h3>Think like an investor</h3><p>Separate the symptoms from the underlying causes. Decide which issues your strategy must address first, and explain why.</p></article>
+        </div>
+      </div>
+      <div class="section-content" id="numbers-globalroute">
+        <article class="info-card">
+          <span class="card-kicker">FINANCIAL SNAPSHOT</span><h3>Company performance</h3>
+          <p class="table-note">Compare the previous figures with the current figures.</p>
+          <div class="table-wrap"><table><thead><tr><th>Metric</th><th>Previous</th><th>Current</th></tr></thead><tbody>
+          <tr><td>Revenue</td><td>$250M</td><td class="current-value">$245M</td></tr><tr><td>Net profit</td><td>$35M</td><td class="current-value">$30M</td></tr><tr><td>Market share</td><td>35%</td><td class="current-value">27%</td></tr><tr><td>Stock price</td><td>$110</td><td class="current-value">$82</td></tr>
+          </tbody></table></div>
+          <p class="footnote">Use the figures as evidence. Explain what has changed and why it matters to investors.</p>
+        </article>
+      </div>
+      <div class="section-content" id="future-globalroute">
+        <article class="info-card feature"><span class="card-kicker">WHAT COMES NEXT?</span><h3>Future outlook</h3><p>the logistics company is negotiating with an AI startup to develop and implement a logistics optimization platform. It could reduce costs and improve efficiency, but it requires substantial investment, training, and restructuring. Its performance across international operations is uncertain.</p></article>
+      </div>
+      <div class="challenge-card"><div class="challenge-label">YOUR INVESTMENT CHALLENGE</div><p>How should the logistics company approach technological transformation? Should it build, buy, or partner to obtain the technology? How can it manage implementation and employees while convincing investors it can adapt?</p></div>
+    </section>
+  <section class="guide">
+    <div class="guide-head"><h3>What your team needs to do</h3><span>YOUR PITCH ROADMAP</span></div>
+    <div class="guide-grid">
+      <div class="guide-item"><b>01 / Understand</b><p>Identify the company’s central problem, root causes, and the people affected.</p></div>
+      <div class="guide-item"><b>02 / Analyze</b><p>Use the financial figures to explain the company’s performance and investor concerns.</p></div>
+      <div class="guide-item"><b>03 / Convince</b><p>Present a realistic strategy, explain its expected impact, acknowledge risks, and defend your investment case.</p></div>
+    </div>
+  </section>
+  <div class="footer">MOCK INVESTMENT CLUB · DISCOVERY DAY · ALL COMPANIES AND FIGURES ARE FICTIONAL</div>
+</main>
+<script>
+const companyButtons=[...document.querySelectorAll('.company-select')];
+const panels=[...document.querySelectorAll('.scenario-panel')];
+function showCompany(id){
+  companyButtons.forEach(b=>{const on=b.dataset.company===id;b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false')});
+  panels.forEach(p=>p.classList.toggle('active',p.id===id));
+}
+companyButtons.forEach(b=>b.addEventListener('click',()=>showCompany(b.dataset.company)));
+document.querySelectorAll('.section-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const panel=tab.closest('.scenario-panel');
+    panel.querySelectorAll('.section-tab').forEach(t=>t.classList.toggle('active',t===tab));
+    panel.querySelectorAll('.section-content').forEach(c=>c.classList.toggle('active',c.id===tab.dataset.target));
+  });
+});
+</script>
+</body>
+</html>
